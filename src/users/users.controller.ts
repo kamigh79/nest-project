@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './request';
 import { Prisma } from '@prisma/client';
@@ -20,6 +20,10 @@ export class UsersController {
       PassWord: hashedPassword,
       Phone: userData.Phone,
     };
+
+    if (await this.usersService.isUserDuplicated(data)) {
+      throw new BadRequestException(null, 'User tekrarist!');
+    }
 
     const createdUser = await this.usersService.createUser(data);
 

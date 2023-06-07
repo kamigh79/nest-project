@@ -16,6 +16,24 @@ export class UsersService {
     });
   }
 
+  async isUserDuplicated(data: Prisma.UserCreateInput): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            Email: data.Email.toLowerCase(),
+          },
+          {
+            UserName: data.UserName.toLowerCase(),
+          },
+          { Phone: data.Phone.toLowerCase() },
+        ],
+      },
+    });
+
+    return !!user;
+  }
+
   async activateUser(data: Prisma.UserCreateInput): Promise<boolean> {
     const user = await this.prisma.user.findFirstOrThrow({
       where: {

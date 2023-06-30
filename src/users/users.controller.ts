@@ -4,11 +4,13 @@ import {
   Body,
   BadRequestException,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LoginDto, ProfileDto, UserDto } from './request';
 import { Prisma, Profile } from '@prisma/client';
 import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller('users')
 export class UsersController {
@@ -49,6 +51,12 @@ export class UsersController {
   ): Promise<string> {
     const result = this.usersService.login(userdata);
     return result;
+  }
+
+  @Get('all')
+  async getAllUsers(@I18n() i18n: I18nContext): Promise<any> {
+    const users = await this.usersService.getAllUsers();
+    return { message: i18n.t('tr.hello'), data: users };
   }
 
   @Post('profile')

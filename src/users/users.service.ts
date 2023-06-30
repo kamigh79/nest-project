@@ -16,6 +16,10 @@ export class UsersService {
       data,
     });
   }
+  async getAllUsers(): Promise<Array<User>> {
+    const users = await this.prisma.user.findMany();
+    return users;
+  }
 
   async updateProfile(data: ProfileDto): Promise<Profile> {
     const user = await this.prisma.user.findFirst({

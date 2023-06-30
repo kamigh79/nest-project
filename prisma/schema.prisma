@@ -16,5 +16,15 @@ model User {
   PassWord String
   Phone String @unique
   Code String? 
+  profile Profile?
   IsVerified Boolean  @default(false)
+}
+model Profile {
+  id     Int     @id @default(autoincrement())
+  Bio    String?
+  Age Int?
+  FirstName String?
+  LastName String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
 }

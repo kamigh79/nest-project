@@ -1,7 +1,14 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserDto } from './request';
-import { Prisma } from '@prisma/client';
+import { LoginDto, ProfileDto, UserDto } from './request';
+import { Prisma, Profile } from '@prisma/client';
+import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -34,6 +41,24 @@ export class UsersController {
     this.usersService.sendSMS(userData.Phone, codeToSMS);
 
     return createdUser?.id;
+  }
+  @Post('login')
+  async loginuser(
+    @Body()
+    userdata: LoginDto,
+  ): Promise<string> {
+    const result = this.usersService.login(userdata);
+    return result;
+  }
+
+  @Post('profile')
+  @UseGuards(JwtAuthGuard)
+  async UpdateUserProfile(
+    @Body()
+    userData: ProfileDto,
+  ): Promise<Profile> {
+    const result = this.usersService.updateProfile(userData);
+    return result;
   }
 
   @Post('activate')

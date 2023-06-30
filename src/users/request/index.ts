@@ -1,4 +1,10 @@
-import { IsEmail, IsOptional, IsString, IsNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsNotEmpty,
+  IsInt,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UserDto {
@@ -25,4 +31,40 @@ export class UserDto {
   @IsOptional()
   @IsString()
   Code: string;
+}
+export class LoginDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  UserName: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  PassWord: string;
+}
+export class ProfileDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  UserName: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  Bio: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  FirstName: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  LastName: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  Age: number;
 }
